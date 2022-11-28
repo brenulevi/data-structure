@@ -1,3 +1,6 @@
+// Nome: Breno Soares Alves
+// Matricula: 2211100022
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +17,7 @@ typedef struct queue
   Plane *last;
 } Queue;
 
+// Initialize the queue
 Queue *createQueue()
 {
   Queue *q = malloc(sizeof(Queue));
@@ -22,6 +26,7 @@ Queue *createQueue()
   return q;
 }
 
+// Get the queue size
 int countPlanes(Queue *q)
 {
   int count = 0;
@@ -33,6 +38,7 @@ int countPlanes(Queue *q)
   return count;
 }
 
+// Add a plane to the queue
 void insertOnQueue(Queue *q, char callsign[])
 {
   Plane *new = malloc(sizeof(Plane));
@@ -51,6 +57,7 @@ void insertOnQueue(Queue *q, char callsign[])
   }
 }
 
+// Remove the first plane from the queue
 void clearTakeOff(Queue *q)
 {
   if (countPlanes(q) > 0)
@@ -63,6 +70,7 @@ void clearTakeOff(Queue *q)
   printf("No planes in queue");
 }
 
+// Print the queue
 void printPlanes(Queue *q)
 {
   if (countPlanes(q) == 0)
@@ -77,6 +85,7 @@ void printPlanes(Queue *q)
   }
 }
 
+// Print the first plane in the queue
 void printFirstPlane(Queue *q)
 {
   if (countPlanes(q) == 0)
@@ -91,29 +100,30 @@ void printFirstPlane(Queue *q)
 int main()
 {
   Queue *SBCH = createQueue();
-  insertOnQueue(SBCH, "GLO1102");
+
+  insertOnQueue(SBCH, "GLO1295");
   countPlanes(SBCH);
 
   clearTakeOff(SBCH);
 
-  insertOnQueue(SBCH, "TAM2002");
+  insertOnQueue(SBCH, "TAM3831");
   countPlanes(SBCH);
 
   clearTakeOff(SBCH);
 
-  insertOnQueue(SBCH, "AZU3765");
+  insertOnQueue(SBCH, "AZU2898");
+  countPlanes(SBCH);
+
+  insertOnQueue(SBCH, "GLO1297");
   countPlanes(SBCH);
 
   clearTakeOff(SBCH);
 
-  insertOnQueue(SBCH, "AZU1234");
+  insertOnQueue(SBCH, "TAM3515");
   countPlanes(SBCH);
 
+  printFirstPlane(SBCH);
   clearTakeOff(SBCH);
-
-  insertOnQueue(SBCH, "GLO1354");
-  countPlanes(SBCH);
-
   clearTakeOff(SBCH);
 
   printPlanes(SBCH);
