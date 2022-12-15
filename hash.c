@@ -3,150 +3,144 @@
 #include <string.h>
 
 #define SIZE 11
-#define true 1
 
-typedef struct element {
+typedef struct element
+{
   int value;
   struct element *next;
 } Element;
 
-typedef struct {
+typedef struct
+{
   Element *tab[SIZE];
 } HashTable;
 
 int calculateHash(int value) { return value % SIZE; }
 
-// FEITO
-void initializeHashTable(HashTable *th) {
-  for (int i = 0; i < SIZE; i++) {
+// Finished
+void initializeHashTable(HashTable *th)
+{
+  for (int i = 0; i < SIZE; i++)
+  {
     th->tab[i] = NULL;
   }
 }
 
-// FEITO
-void insertHashTable(HashTable *th, int value) {
-  // ACHA A LINHA QUE O OBJETA VAI
-  int paraOndeVai = calculateHash(value); // = 1
+// Finished
+void insertHashTable(HashTable *th, int value)
+{
+  int index = calculateHash(value);
 
-	// CRIA O OBJETO
-  Element *novoElemento = malloc(sizeof(Element));
-  novoElemento->value = value;
-  novoElemento->next = NULL;
+  Element *new = malloc(sizeof(Element));
+  new->value = value;
+  new->next = NULL;
 
-	// VERIFICA SE O OBJETO VAI PRO INÍCIO DO HASH OU PRO FINAL DA LISTA ENCADEADA
-  if (th->tab[paraOndeVai] != NULL) {
+  if (th->tab[index] != NULL)
+  {
     Element *aux;
-    for (aux = th->tab[paraOndeVai]; aux != NULL; aux = aux->next) {
+    // for can be replaced by while
+    for (aux = th->tab[index]; aux != NULL; aux = aux->next)
+    {
       if (aux->next == NULL)
       {
-        
-        aux->next = novoElemento;
+        aux->next = new;
         break;
       }
     }
-  } else
-    th->tab[paraOndeVai] = novoElemento;
+  }
+  else
+    th->tab[index] = new;
 }
 
-void search(HashTable *th, int key) {
-	
+// Finished
+void search(HashTable *th, int key)
+{
+  int index = calculateHash(key);
+  Element *aux;
+  for (aux = th->tab[index]; aux != NULL; aux = aux->next)
+  {
+    if (aux->value == key)
+    {
+      printf("Elemento %d está na linha %d", aux->value, index);
+      return;
+    }
+  }
+  printf("Elemento %d não existe\n", key);
 }
 
-// FEITO
-void removeElement(HashTable *th, int key) {
-	// ACHA A LINHA DO ELEMENTO
-	int linhaObjeto = calculateHash(key);
-  // VERIFICA SE O ELEMENTO ESTÁ NO INÍCIO, NO MEIO OU NO FIM DA LISTA ENCADEADA
-  Element *aux, *anterior;
-  for (aux = th->tab[linhaObjeto]; aux != NULL; aux = aux->next){
-    // VERIFICA SE O AUX CORRESPONDE AO ELEMENTO A SER DELETADO
-    if (aux->value == key){
-      // VERIFICA SE O AUX É O PRIMEIRO
-      if(aux == th->tab[linhaObjeto])
-        th->tab[linhaObjeto] = aux->next;
-      // VERIFICA SE O AUX ESTÁ NO FINAL
+// Finished
+void removeElement(HashTable *th, int key)
+{
+  int index = calculateHash(key);
+  Element *aux, *previous;
+  for (aux = th->tab[index]; aux != NULL; aux = aux->next)
+  {
+    if (aux->value == key)
+    {
+      if (aux == th->tab[index])
+        th->tab[index] = aux->next;
       else if (aux->next == NULL)
-        anterior->next = NULL;
-      // VERIFICA SE O AUX ESTÁ NO MEIO
-      else 
-        anterior->next = aux->next;
+        previous->next = NULL;
+      else
+        previous->next = aux->next;
       free(aux);
       return;
     }
-    anterior = aux;
+    previous = aux;
   }
-	printf("%s\n", "Nenhum elemento encontrado");
+  printf("%s\n", "Nenhum elemento encontrado");
 }
 
-// FEITO
-void printLine(HashTable *th, int line) {
-  if (th->tab[line] == NULL) {
+// Finished
+void printLine(HashTable *th, int line)
+{
+  if (th->tab[line] == NULL)
+  {
     printf("%s\n", "Hash Vazio");
     return;
-  } 
-  
+  }
+
   Element *aux;
   for (aux = th->tab[line]; aux != NULL; aux = aux->next)
     printf("%d\n", aux->value);
 }
 
-// FEITO
-void print(HashTable *th) {
-	for (int i = 0; i<SIZE; i++) {
-		printf("Linha %d:\n", i);
-    printLine(th,i);
-		printf("\n");
-		
-	}
+// Finished
+void print(HashTable *th)
+{
+  for (int i = 0; i < SIZE; i++)
+  {
+    printf("Linha %d:\n", i);
+    printLine(th, i);
+    printf("\n");
+  }
 }
 
-int main() {
+int main()
+{
   HashTable th;
   initializeHashTable(&th);
-
-	// 3
-  insertHashTable(&th, 14);
-  insertHashTable(&th, 25);
-  insertHashTable(&th, 36);
-  insertHashTable(&th, 47);
-  insertHashTable(&th, 58);
-
-	// 0
-  insertHashTable(&th, 11);
-  insertHashTable(&th, 22);
-  insertHashTable(&th, 33);
-
-	// 1
-  insertHashTable(&th, 12);
-  insertHashTable(&th, 23);
-  insertHashTable(&th, 34);
-
+  printf("\n\nTabela vazia: \n");
   print(&th);
-	
-	
-	
 
-  // printf("\n\nTabela vazia: \n");
-  // print(&th);
+  insertHashTable(&th, 7);
+  insertHashTable(&th, 17);
+  insertHashTable(&th, 36);
+  insertHashTable(&th, 100);
+  insertHashTable(&th, 106);
+  insertHashTable(&th, 205);
+  printf("\n\nTabela apos insercoes: \n");
+  print(&th);
 
-  // insertHashTable(&th, 7);
-  // insertHashTable(&th, 17);
-  // insertHashTable(&th, 36);
-  // insertHashTable(&th, 100);
-  // insertHashTable(&th, 106);
-  // insertHashTable(&th, 205);
-  // printf("\n\nTabela apos insercoes: \n");
-  // print(&th);
+  printf("\n\nBuscando elementos: \n");
+  search(&th, 14);
+  search(&th, 205);
 
-  // printf("\n\nBuscando elementos: \n");
-  // search(&th, 14);
-  // search(&th, 205);
-
-  // removeElement(&th, 205);
-  // removeElement(&th, 7);
-  // removeElement(&th, 106);
-  // printf("\n\nTabela apos remocoes: \n");
-  // print(&th);
+  removeElement(&th, 205);
+  removeElement(&th, 7);
+  removeElement(&th, 106);
+  printf("\n\nTabela apos remocoes: \n");
+  print(&th);
 
   return 0;
 }
